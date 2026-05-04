@@ -4,9 +4,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { ResetToken, User } from 'src/user/user.entity';
-import { EmailModule } from 'src/email/email.module';
-import { AuthGuard } from 'src/utils/guards/auth.guard';
+import { ResetToken, User } from '../user/user.entity';
+import { EmailModule } from '../email/email.module';
+import { AuthGuard } from '../utils/guards/auth.guard';
 
 @Module({
   imports: [
@@ -26,4 +26,4 @@ import { AuthGuard } from 'src/utils/guards/auth.guard';
   providers: [AuthService, AuthGuard],
   exports: [JwtModule, AuthGuard],
 })
-export class AuthModule {}
+export class AuthModule { }

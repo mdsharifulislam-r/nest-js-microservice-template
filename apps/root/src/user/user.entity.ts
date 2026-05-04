@@ -6,8 +6,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { USER_ROLES } from 'src/utils/enums/user';
-import { hashPassword } from 'src/utils/helper/bycrptHelper';
+import { USER_ROLES } from '../utils/enums/user';
+import { hashPassword } from '../utils/helper/bycrptHelper';
 
 class Authentication {
   isResetPassword!: boolean;

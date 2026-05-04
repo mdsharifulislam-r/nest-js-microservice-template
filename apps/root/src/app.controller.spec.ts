@@ -16,7 +16,7 @@ describe('AppController', () => {
 
   describe('getHello', () => {
     it('should return a welcome string', () => {
-      expect(appController.getHello()).toContain('NestJS');
+      expect(appController.getHello({} as any)).toContain('NestJS');
     });
   });
 

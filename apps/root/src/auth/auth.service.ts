@@ -7,16 +7,16 @@ import {
   VerifyEmailDto,
 } from './auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResetToken, User } from 'src/user/user.entity';
+import { ResetToken, User } from '../user/user.entity';
 import { Repository } from 'typeorm';
-import { ApiError } from 'src/utils/errors/api-error';
-import sendResponse from 'src/utils/helper/sendResponse';
-import cryptoToken from 'src/utils/helper/cryptoToken';
-import { comparePassword, hashPassword } from 'src/utils/helper/bycrptHelper';
+import { ApiError } from '../utils/errors/api-error';
+import sendResponse from '../utils/helper/sendResponse';
+import cryptoToken from '../utils/helper/cryptoToken';
+import { comparePassword, hashPassword } from '../utils/helper/bycrptHelper';
 import { JwtService } from '@nestjs/jwt';
-import generateOTP from 'src/utils/helper/generateOtp';
-import { emailTemplate } from 'src/utils/shared/emailTemplate';
-import { EmailService } from 'src/email/email.service';
+import generateOTP from '../utils/helper/generateOtp';
+import { emailTemplate } from '../utils/shared/emailTemplate';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +27,7 @@ export class AuthService {
     @InjectRepository(ResetToken) private readonly resetTokenRepo: Repository<ResetToken>,
     private readonly jwtService: JwtService,
     private readonly emailService: EmailService,
-  ) {}
+  ) { }
 
   private async findActiveUserByEmail(email: string): Promise<User> {
     const user = await this.userRepo.findOne({

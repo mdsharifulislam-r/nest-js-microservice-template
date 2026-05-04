@@ -18,16 +18,16 @@ import {
 } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateProfileDto } from './user.dto';
-import { USER_ROLES } from 'src/utils/enums/user';
-import { CurrentUser } from 'src/utils/decorators/user.decorator';
-import { Auth } from 'src/utils/guards/auth.guard';
-import { FileUpload } from 'src/utils/decorators/file-uploader.decorator';
-import { GetFile } from 'src/utils/decorators/get-file.decorator';
+import { USER_ROLES } from '../utils/enums/user';
+import { CurrentUser } from '../utils/decorators/user.decorator';
+import { Auth } from '../utils/guards/auth.guard';
+import { FileUpload } from '../utils/decorators/file-uploader.decorator';
+import { GetFile } from '../utils/decorators/get-file.decorator';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
@@ -74,4 +74,11 @@ export class UserController {
   getAllUsers(@Query() query: Record<string, any>) {
     return this.userService.getAllUsers(query);
   }
+
+  @Get('test')
+  @HttpCode(HttpStatus.OK)
+  async test() {
+    return this.userService.getDataFromTest();
+  }
+
 }

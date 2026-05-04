@@ -10,8 +10,13 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "types": ["jest", "node"],
-    "typeRoots": ["./node_modules/@types"],
+    "types": [
+      "jest",
+      "node"
+    ],
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
@@ -21,8 +26,15 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "src/*": ["src/*"]
+      "src/*": [
+        "src/*"
+      ]
     }
   },
-  "include": ["src","scripts"],
+  "include": [
+    "src",
+    "apps",
+    "libs",
+    "scripts"
+  ]
 }

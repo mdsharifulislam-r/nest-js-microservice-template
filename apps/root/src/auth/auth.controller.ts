@@ -14,13 +14,13 @@ import {
   LoginDto,
   VerifyEmailDto,
 } from './auth.dto';
-import { CurrentUser } from 'src/utils/decorators/user.decorator';
-import { Auth } from 'src/utils/guards/auth.guard';
+import { CurrentUser } from '../utils/decorators/user.decorator';
+import { Auth } from '../utils/guards/auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)

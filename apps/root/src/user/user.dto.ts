@@ -6,7 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional, PartialType, OmitType } from '@nestjs/swagger';
-import { USER_ROLES } from 'src/utils/enums/user';
+import { USER_ROLES } from '../utils/enums/user';
 
 export class CreateUserDto {
   @ApiProperty({ example: 'John Doe', description: 'Full name of the user' })
@@ -44,7 +44,7 @@ export class UpdateProfileDto {
   @IsString()
   contact?: string;
 
-  @ApiPropertyOptional({ example: 'https://example.com/profile.jpg', description: 'Updated profile image URL',type: 'string',format:"binary" })
+  @ApiPropertyOptional({ example: 'https://example.com/profile.jpg', description: 'Updated profile image URL', type: 'string', format: "binary" })
   @IsOptional()
   @IsString()
   image?: string;

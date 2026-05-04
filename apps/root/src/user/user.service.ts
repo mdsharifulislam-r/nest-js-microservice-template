@@ -2,15 +2,15 @@ import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
-import { ApiError } from 'src/utils/errors/api-error';
-import { EmailService } from 'src/email/email.service';
-import { emailTemplate } from 'src/utils/shared/emailTemplate';
-import generateOTP from 'src/utils/helper/generateOtp';
-import sendResponse from 'src/utils/helper/sendResponse';
-import { cleanObject } from 'src/utils/helper/cleanObject';
-import TypeOrmQueryBuilder from 'src/utils/queryBuilder/queryBuilder';
+import { EmailService } from '../email/email.service';
 import { CreateUserDto, UpdateProfileDto } from './user.dto';
-import { SearchService } from 'src/utils/helper-modules/search/search.service';
+import { ApiError } from '../utils/errors/api-error';
+import generateOTP from '../utils/helper/generateOtp';
+import sendResponse from '../utils/helper/sendResponse';
+import { cleanObject } from '../utils/helper/cleanObject';
+import TypeOrmQueryBuilder from '../utils/queryBuilder/queryBuilder';
+import { KafkaService } from '../utils/helper-modules/kafka/kafka.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class UserService {
@@ -19,7 +19,8 @@ export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     private readonly emailService: EmailService,
-  ) {}
+    private readonly kafkaService: KafkaService
+  ) { }
 
   async create(dto: CreateUserDto) {
     const exists = await this.userRepo.findOne({ where: { email: dto.email } });
@@ -123,6 +124,17 @@ export class UserService {
       pagination,
       success: true,
       message: 'Users fetched successfully',
+    });
+  }
+
+  async getDataFromTest() {
+    const d = await this.kafkaService.send('test', 'test')
+    console.log('🚀 ~ UserService ~ getDataFromTest ~ d:', d)
+    return sendResponse({
+      statusCode: HttpStatus.OK,
+      data: d,
+      success: true,
+      message: 'Data fetched successfully',
     });
   }
 }
