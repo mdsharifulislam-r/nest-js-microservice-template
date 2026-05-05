@@ -4,10 +4,10 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { User } from './user.entity';
 import { AuthModule } from '../auth/auth.module';
-import { KafkaModule } from '../utils/helper-modules/kafka/kafka.module';
+// import { KafkaModule } from '../utils/helper-modules/kafka/kafka.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), AuthModule, KafkaModule],
+  imports: [TypeOrmModule.forFeature([User]), AuthModule,],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService, TypeOrmModule],

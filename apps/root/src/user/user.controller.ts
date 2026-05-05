@@ -75,10 +75,4 @@ export class UserController {
     return this.userService.getAllUsers(query);
   }
 
-  @Get('test')
-  @HttpCode(HttpStatus.OK)
-  async test() {
-    return this.userService.getDataFromTest();
-  }
-
 }

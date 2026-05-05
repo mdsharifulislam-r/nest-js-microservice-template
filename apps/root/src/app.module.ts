@@ -46,7 +46,7 @@ import { JwtModule } from '@nestjs/jwt';
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         autoLoadEntities: true,
         synchronize: config.get<string>('NODE_ENV') !== 'production',
-        dropSchema: config.get<string>('NODE_ENV') === 'development',
+        // dropSchema: config.get<string>('NODE_ENV') === 'development',
         // logging: config.get<string>('NODE_ENV') === 'development',
       }),
     }),
@@ -68,4 +68,4 @@ import { JwtModule } from '@nestjs/jwt';
   providers: [AppService],
   exports: [JwtModule],
 })
-export class AppModule {}
+export class AppModule { }

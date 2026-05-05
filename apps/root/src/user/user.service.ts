@@ -11,6 +11,7 @@ import { cleanObject } from '../utils/helper/cleanObject';
 import TypeOrmQueryBuilder from '../utils/queryBuilder/queryBuilder';
 import { KafkaService } from '../utils/helper-modules/kafka/kafka.service';
 import { firstValueFrom } from 'rxjs';
+import { emailTemplate } from '../utils/shared/emailTemplate';
 
 @Injectable()
 export class UserService {
@@ -19,28 +20,35 @@ export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     private readonly emailService: EmailService,
-    private readonly kafkaService: KafkaService
   ) { }
 
   async create(dto: CreateUserDto) {
     const exists = await this.userRepo.findOne({ where: { email: dto.email } });
     if (exists) {
+      if (!exists.verified) {
+        this.handleUnverifiedUser(dto.email);
+        return sendResponse({
+          statusCode: HttpStatus.OK,
+          success: true,
+          message: 'User with this email already exists. Please verify your email.',
+        });
+      }
       throw new ApiError(HttpStatus.CONFLICT, 'User with this email already exists');
     }
 
     const user = this.userRepo.create(dto);
     const savedUser = await this.userRepo.save(user);
     const otp = generateOTP();
-    // const template = emailTemplate.createAccount({
-    //   name: savedUser.name,
-    //   email: savedUser.email,
-    //   otp,
-    // });
+    const template = emailTemplate.createAccount({
+      name: savedUser.name,
+      email: savedUser.email,
+      otp,
+    });
 
-    // // Fire and forget – don't block registration on email
-    // this.emailService.sendEmail(template).catch((err) =>
-    //   this.logger.error(`Failed to send welcome email to ${savedUser.email}`, err),
-    // );
+    // Fire and forget – don't block registration on email
+    this.emailService.sendEmail(template).catch((err) =>
+      this.logger.error(`Failed to send welcome email to ${savedUser.email}`, err),
+    );
 
     await this.userRepo.update(
       { id: savedUser.id },
@@ -127,14 +135,37 @@ export class UserService {
     });
   }
 
-  async getDataFromTest() {
-    const d = await this.kafkaService.send('test', 'test')
-    console.log('🚀 ~ UserService ~ getDataFromTest ~ d:', d)
+  async handleUnverifiedUser(email: string) {
+    const user = await this.userRepo.findOne({ where: { email } });
+    if (!user) {
+      throw new ApiError(HttpStatus.NOT_FOUND, 'User not found');
+    }
+    if (user.verified) {
+      throw new ApiError(HttpStatus.BAD_REQUEST, 'User is already verified');
+    }
+    const otp = generateOTP();
+    const template = emailTemplate.createAccount({
+      name: user.name,
+      email: user.email,
+      otp,
+    });
+    await this.emailService.sendEmail(template);
+    await this.userRepo.update(
+      { id: user.id },
+      {
+        authentication: {
+          isResetPassword: false,
+          oneTimeCode: otp,
+          expireAt: new Date(Date.now() + 3 * 60 * 1000),
+        },
+      },
+    );
     return sendResponse({
       statusCode: HttpStatus.OK,
-      data: d,
+      data: null,
       success: true,
-      message: 'Data fetched successfully',
+      message: 'OTP sent to your email',
     });
   }
+
 }
