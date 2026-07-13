@@ -14,7 +14,9 @@ export class ResponseInterceptor implements NestInterceptor {
         if (!data || typeof data !== 'object') return data;
 
         const { success, message, statusCode, pagination, data: payload } = data;
-
+        if (statusCode) {
+          context.switchToHttp().getResponse().statusCode = statusCode;
+        }
         return {
           success: success ?? true,
           statusCode: statusCode ?? context.switchToHttp().getResponse().statusCode,

@@ -4,13 +4,15 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EmailModule } from './email/email.module';
+import { EmailModule } from '../../../libs/helper-modules/email/email.module';
 import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { SocketModule } from './utils/helper-modules/socket/socket.module';
+
 import { JwtModule } from '@nestjs/jwt';
 // import { KafkaModule } from './utils/helper-modules/kafka/kafka.module';
+import { JwtAuthModule } from '../../../libs/helper-modules/jwt-auth/jwt-auth.module';
+import { SocketModule } from 'libs/helper-modules/socket/socket.module';
 
 
 @Module({
@@ -62,6 +64,7 @@ import { JwtModule } from '@nestjs/jwt';
     EmailModule,
     AuthModule,
     SocketModule,
+    JwtAuthModule,
     // KafkaModule,
   ],
   controllers: [AppController],

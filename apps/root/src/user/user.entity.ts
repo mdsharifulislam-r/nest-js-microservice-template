@@ -6,8 +6,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { USER_ROLES } from '../utils/enums/user';
-import { hashPassword } from '../utils/helper/bycrptHelper';
+import { USER_ROLES } from 'libs/enums/user';
+import { hashPassword } from 'libs/helper/bycrptHelper';
 
 class Authentication {
   isResetPassword!: boolean;
@@ -64,6 +64,9 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
+
+
 
   @BeforeInsert()
   async hashPasswordBeforeInsert() {

@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     private readonly reflector: Reflector,
-  ) {}
+  ) { }
 
   canActivate(context: ExecutionContext): boolean {
     const roles = this.reflector.get<USER_ROLES[]>('roles', context.getHandler());
@@ -34,6 +34,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       const payload = this.jwtService.verify(token);
+
       request.user = payload;
 
       if (roles?.length && !roles.includes(payload.role)) {
@@ -45,8 +46,8 @@ export class AuthGuard implements CanActivate {
 
       return true;
     } catch (err) {
-      if (err instanceof ApiError) throw err;
-      throw new ApiError(HttpStatus.UNAUTHORIZED, 'Invalid or expired token');
+      // if (err instanceof ApiError) throw err;
+      throw new ApiError(HttpStatus.UNAUTHORIZED, err.message);
     }
   }
 }

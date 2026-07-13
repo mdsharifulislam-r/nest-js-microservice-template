@@ -1,17 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import type { Cache } from 'cache-manager';
-import type { RedisClientType } from 'redis';
+import { RedisClientType } from 'redis';
 
 @Injectable()
 export class CacheService {
   constructor(
-    @Inject(CACHE_MANAGER)
-    private readonly cache: Cache,
-
     @Inject('REDIS_CLIENT')
     private readonly redis: RedisClientType,
-  ) {}
+  ) { }
 
   // =========================
   // KEY BUILDER
@@ -35,10 +30,10 @@ export class CacheService {
   async get<T>(key: string, query?: Record<string, any>) {
     const fullKey = this.buildKey(key, query);
 
-    const data = await this.cache.get<string>(fullKey);
+    const data = await this.redis.get(fullKey);
     if (!data) return null;
 
-    return JSON.parse(data);
+    return JSON.parse(data) as T;
   }
 
   // =========================
@@ -47,7 +42,9 @@ export class CacheService {
   async set(key: string, value: any, ttl = 60, query?: Record<string, any>) {
     const fullKey = this.buildKey(key, query);
 
-    await this.cache.set(fullKey, JSON.stringify(value), ttl * 1000);
+    await this.redis.set(fullKey, JSON.stringify(value), {
+      EX: ttl, // seconds
+    });
   }
 
   // =========================
@@ -55,18 +52,20 @@ export class CacheService {
   // =========================
   async del(key: string, query?: Record<string, any>) {
     const fullKey = this.buildKey(key, query);
-    await this.cache.del(fullKey);
+    await this.redis.del(fullKey);
   }
 
   // =========================
-  // 🚀 PATTERN DELETE (FIX YOU NEED)
+  // DELETE BY PATTERN (SAFE)
   // =========================
   async deleteByPattern(pattern: string) {
-    const keys = await this.redis.keys(`${pattern}*`);
+    const keys = await this.redis.keys(`${pattern}:*`);
+
+    console.log('FOUND KEYS:', keys);
 
     if (!keys.length) return;
 
-    await this.redis.del(keys);
+    await this.redis.del(keys); // FIXED
   }
 
   // =========================

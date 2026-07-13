@@ -38,6 +38,11 @@ class TypeOrmQueryBuilder<T extends ObjectLiteral> {
     return this;
   }
 
+  extraFilter(conditions: Record<string, any>) {
+    this.qb.where(conditions);
+    return this;
+  }
+
   /**
    * Apply column equality filters from query params.
    * @param excludeFields additional query param names to skip
@@ -84,12 +89,21 @@ class TypeOrmQueryBuilder<T extends ObjectLiteral> {
   }
 
   /** Eager-load relations */
-  populate(relations: string[]) {
+  populate(relations: string[], selects: Record<string, string[]> = {}) {
+
     for (const rel of relations) {
-      this.qb.leftJoinAndSelect(`${this.alias}.${rel}`, rel);
+      let selectFields = selects[rel];
+      if (selectFields?.length) {
+        selectFields = selectFields.map((f) => `${rel}.${f.trim()}`);
+      }
+
+
+      this.qb.leftJoinAndSelect(`${this.alias}.${rel}`, `${rel}`).select(selectFields?.length ? [`${this.alias}`, `${rel}.id`, ...selectFields] : [])
     }
     return this;
   }
+
+
 
   async getMany(): Promise<T[]> {
     return this.qb.getMany();

@@ -36,5 +36,5 @@
     "apps",
     "libs",
     "scripts"
-  ]
+, "libs/helper-modules/jwt-auth"  ]
 }

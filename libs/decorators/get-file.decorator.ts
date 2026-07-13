@@ -11,7 +11,7 @@ export const GetFile = createParamDecorator(
 
     if (request.files) {
       // FileFieldsInterceptor: files is { fieldName: File[] }
-      const file = request.files[fieldName]?.[0];
+      const file = request.files[fieldName]
       return getPublicUrl(file) as string | null;
     }
 

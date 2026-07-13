@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { LoggingInterceptor } from './utils/inspectors/logger.inspector';
-import { ResponseInterceptor } from './utils/inspectors/response.interceptor';
+import { LoggingInterceptor } from 'libs/inspectors/logger.inspector';
+import { ResponseInterceptor } from 'libs/inspectors/response.interceptor';
 import { ValidationPipe, Logger } from '@nestjs/common';
-import { formatValidationErrors } from './utils/errors/validator-error';
-import { GlobalExceptionFilter } from './utils/filters/global-exception.filter';
+import { formatValidationErrors } from 'libs/errors/validator-error';
+import { GlobalExceptionFilter } from 'libs/filters/global-exception.filter';
 import 'reflect-metadata';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 

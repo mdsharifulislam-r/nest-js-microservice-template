@@ -30,6 +30,7 @@ import { CacheService } from './cache.service';
       useFactory: async (config: ConfigService) => {
         const client = createClient({
           url: `redis://${config.get('REDIS_HOST')}:${config.get('REDIS_PORT')}`,
+          database: 0
         });
 
         await client.connect();
@@ -41,4 +42,4 @@ import { CacheService } from './cache.service';
   ],
   exports: [CacheService, 'REDIS_CLIENT'],
 })
-export class RedisCacheModule {}
+export class RedisCacheModule { }

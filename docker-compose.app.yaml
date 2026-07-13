@@ -1,0 +1,76 @@
+services:
+  hotel-service:
+    build:
+      context: .
+      dockerfile: apps/hotel/Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASS=root
+      - DB_NAME=nest_db
+      - KAFKA_URL=kafka:9092
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    networks:
+      - template-network
+
+  booking-service:
+    build:
+      context: .
+      dockerfile: apps/booking/Dockerfile
+    ports:
+      - "3002:3002"
+    networks:
+      - template-network
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASS=root
+      - DB_NAME=nest_db
+      - KAFKA_URL=kafka:9092
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: apps/notification/Dockerfile
+    ports:
+      - "3004:3004"
+    networks:
+      - template-network
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASS=root
+      - DB_NAME=nest_db
+      - KAFKA_URL=kafka:9092
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  root-service:
+    build:
+      context: .
+      dockerfile: apps/root/Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - template-network
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASS=root
+      - DB_NAME=nest_db
+      - KAFKA_URL=kafka:9092
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+networks:
+  template-network:
+    external: true

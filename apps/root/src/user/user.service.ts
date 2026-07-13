@@ -2,16 +2,14 @@ import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
-import { EmailService } from '../email/email.service';
+import { EmailService } from '../../../../libs/helper-modules/email/email.service';
 import { CreateUserDto, UpdateProfileDto } from './user.dto';
-import { ApiError } from '../utils/errors/api-error';
-import generateOTP from '../utils/helper/generateOtp';
-import sendResponse from '../utils/helper/sendResponse';
-import { cleanObject } from '../utils/helper/cleanObject';
-import TypeOrmQueryBuilder from '../utils/queryBuilder/queryBuilder';
-import { KafkaService } from '../utils/helper-modules/kafka/kafka.service';
-import { firstValueFrom } from 'rxjs';
-import { emailTemplate } from '../utils/shared/emailTemplate';
+import sendResponse from 'libs/helper/sendResponse';
+import { ApiError } from 'libs/errors/api-error';
+import generateOTP from 'libs/helper/generateOtp';
+import { emailTemplate } from 'libs/shared/emailTemplate';
+import { cleanObject } from 'libs/helper/cleanObject';
+import TypeOrmQueryBuilder from 'libs/queryBuilder/queryBuilder';
 
 @Injectable()
 export class UserService {

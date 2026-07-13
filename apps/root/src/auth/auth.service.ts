@@ -9,14 +9,14 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResetToken, User } from '../user/user.entity';
 import { Repository } from 'typeorm';
-import { ApiError } from '../utils/errors/api-error';
-import sendResponse from '../utils/helper/sendResponse';
-import cryptoToken from '../utils/helper/cryptoToken';
-import { comparePassword, hashPassword } from '../utils/helper/bycrptHelper';
+import { ApiError } from 'libs/errors/api-error';
+import sendResponse from 'libs/helper/sendResponse';
+import cryptoToken from 'libs/helper/cryptoToken';
+import { comparePassword, hashPassword } from 'libs/helper/bycrptHelper';
 import { JwtService } from '@nestjs/jwt';
-import generateOTP from '../utils/helper/generateOtp';
-import { emailTemplate } from '../utils/shared/emailTemplate';
-import { EmailService } from '../email/email.service';
+import generateOTP from 'libs/helper/generateOtp';
+import { emailTemplate } from 'libs/shared/emailTemplate';
+import { EmailService } from '../../../../libs/helper-modules/email/email.service';
 
 @Injectable()
 export class AuthService {

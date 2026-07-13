@@ -14,8 +14,8 @@ import {
   LoginDto,
   VerifyEmailDto,
 } from './auth.dto';
-import { CurrentUser } from '../utils/decorators/user.decorator';
-import { Auth } from '../utils/guards/auth.guard';
+import { CurrentUser } from 'libs/decorators/user.decorator';
+import { Auth } from 'libs/guards/auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
